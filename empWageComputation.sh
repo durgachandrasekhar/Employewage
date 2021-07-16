@@ -1,10 +1,14 @@
 #! /bin/bash -x
 #constants
 IS_PRESENT=1
-echo "welcome to Employeewage program"
+empcheck=$((RANDOM%2))
+EMP_RATE_PER_HR=20
+
 if [ $empcheck -eq $IS_PRESENT ]
 then
-echo "Employee is present"
+ empHr=8
 else
-echo "Employee is absent"
+ empHr=0
 fi
+
+salary=$(( $empHr * $EMP_RATE_PER_HR ))

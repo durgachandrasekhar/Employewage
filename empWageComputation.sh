@@ -1,23 +1,49 @@
-#!/bin/bash 
+#!/bin/bash -x
 
-isPresent=1
+echo "Welcome to Employee Wage Computation Program"
+
+isFullTime=1
 isPartTime=2
 isAbsent=0
 wagePerHr=20
-fullDayHours=8
-partTimeHours=8
+empHrs_inMonth=100
+workingDaysPerMonth=20
 
-randomNumber=$((RANDOM%3))
-if [ $randomNumber -eq $isPresent ]
-then 
-    echo "Employee is Present"
-    dailyEmployeeWage=$(($fullDayHours*$wagePerHr))
-elif [ $randomNumber -eq $isPartTime ]
-then
-    dailyEmployeeWage=$(($partTimeHours*$wagePerHr))
-else
-    echo "Employee is Absent"
-    dailyEmployeeWage=0
-fi
+totalEmpHrs=0
+totalWorkingDays=0
 
-echo $dailyEmployeeWage
+declare -A dailyWage;
+function getWorkingHours() {
+  local $empCheck=$1
+  case $empCheck in
+            $isFullTime)
+               empWorkingHours=8
+               ;;
+            $isPartTime)
+               empWorkingHours=8
+               ;;
+            *)
+               empWorkingHours=0
+               ;;
+   esac
+   echo $empWorkingHours
+}
+
+function getEmpWage() {
+    local empHr=$1
+    echo $(($empHr*$wagePerHr))
+}
+
+while [[ $totalEmpHrs -lt $empHrs_inMonth && $totalWorkingDays -lt $workingDaysPerMonth ]]
+do
+   ((totalWorkingDays++))
+   empCheck=$((RANDOM%3))
+   empWorkingHours="$( getWorkingHours $empCheck )"
+   totalEmpHrs=$(( $totalEmpHrs+$empWorkingHours ))
+   dailyWage["Day "$totalWorkingDays]="$( getEmpWage $empWorkingHours )"
+done
+
+totalSalary=$(($totalEmpHrs*$workingDaysPerMonth))
+
+echo ${dailyWage[@]}
+echo ${!dailyWage[@]}

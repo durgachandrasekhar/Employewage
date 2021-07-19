@@ -1,14 +1,23 @@
-#! /bin/bash -x
-#constants
-IS_PRESENT=1
-empcheck=$((RANDOM%2))
-EMP_RATE_PER_HR=20
+#!/bin/bash 
 
-if [ $empcheck -eq $IS_PRESENT ]
+isPresent=1
+isPartTime=2
+isAbsent=0
+wagePerHr=20
+fullDayHours=8
+partTimeHours=8
+
+randomNumber=$((RANDOM%3))
+if [ $randomNumber -eq $isPresent ]
+then 
+    echo "Employee is Present"
+    dailyEmployeeWage=$(($fullDayHours*$wagePerHr))
+elif [ $randomNumber -eq $isPartTime ]
 then
- empHr=8
+    dailyEmployeeWage=$(($partTimeHours*$wagePerHr))
 else
- empHr=0
+    echo "Employee is Absent"
+    dailyEmployeeWage=0
 fi
 
-salary=$(( $empHr * $EMP_RATE_PER_HR ))
+echo $dailyEmployeeWage
